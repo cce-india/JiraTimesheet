@@ -1,0 +1,31 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+    var errorMessage = TempData["errorMessage"];
+}
+
+
+<div>
+    @if (errorMessage != null && (string)errorMessage != "")
+    {
+        <label>@errorMessage</label>
+        TempData["errorMessage"] = null;
+    }
+    else
+    {
+        <center><h2>Jira TimeSheet</h2></center>
+        <br/><br/>
+        <form id="SubmitDate" method="POST">
+            <label>Enter Start Date:</label>
+            <input id="todate" name="todate" type="date" value="" required />
+
+            <label>Enter End Date:</label>
+            <input id="fromdate" name="fromdate" type="date" value="" required />
+
+            <div>
+                <input type="submit" value="Submit" />
+            </div>
+         </form>
+         
+    }
+
+</div>

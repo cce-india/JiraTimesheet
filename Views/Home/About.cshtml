@@ -1,0 +1,22 @@
+﻿@using JiraTimesheet.Models
+@{
+    ViewBag.Title = "About";
+    IEnumerable<Issue> listProjects = (IEnumerable<Issue>)ViewData["projectList"];
+}
+<hgroup class="title">
+    <h1>@ViewBag.Title.</h1>
+    <h2>@ViewBag.Message</h2>
+</hgroup>
+
+<article>
+    <p>
+        <h3>List Of Projects</h3>
+        <ol>
+            @foreach (var project in listProjects)
+            {
+                <li>@project.Key</li>
+            }
+        </ol>
+    </p>
+
+</article>

@@ -1,0 +1,100 @@
+﻿@model IEnumerable<JiraTimesheet.Models.JiraTimeSheet>
+@{
+    Layout = null;
+    string sBaseUrl = System.Configuration.ConfigurationManager.AppSettings["BaseUrl"];
+    string sJiraUrl = System.Configuration.ConfigurationManager.AppSettings["JiraBaseUrl"];
+}
+
+ <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+<center>
+    <h2>Jira</h2></center>
+<center style="color:blue">@ViewBag.title</center>
+
+<br/>
+<style>
+table, th, td {
+    border: 1px solid black;
+    text-align: center;
+
+            cellpadding:1px;
+            cellspacing:1px;
+       }
+        th{
+            background:#ffffff;
+        }
+        .active {
+            background:grey;
+        }
+        table {
+            border-spacing: 0px !important;
+        }
+</style>
+
+<table style="width: 100%" border="1" id="data">
+    <thead>
+    <tr>
+
+        <th>Project</th>
+        <th>Issue Type</th>
+        <th>Key</th>
+        <th>Summary</th>
+        <th>Original Assignee</th>
+        <th>Time Spent</th>
+        <th>Assignee</th>
+        <th>Status</th>
+        <th>Fix Version/s</th>
+        <th>Website</th>
+        <th>Created</th>
+        <th>Reporter</th>
+        <th>Updated</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var r in Model)
+    {
+        <tr>
+            <td>@r.Project</td>
+            <td>@r.IssueType</td>
+            <td><a href="@sJiraUrl/@r.Key" target="">@r.Key</a></td>
+            <td>@r.Summary</td>
+            <td>@r.OriginalAssignee</td>
+            <td>@r.TimeSpent</td>
+            <td>@r.Assignee</td>
+            <td>@r.Status</td>
+            <td>@r.FixVersions</td>
+            <td>@r.Website</td>
+            <td>@r.Created.ToString("MM/dd/yyyy hh:mm tt")</td>
+            <td>@r.Reporter</td>
+            <td>@r.Updated.ToString("MM/dd/yyyy hh:mm tt")</td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+<div><br/><a href="@sBaseUrl">Back</a></div>
+    <script>
+        $(document).ready(function () {
+            $('#data').after('<br/><div id="nav"></div>');
+            var rowsShown = 10;
+            var rowsTotal = $('#data tbody tr').length;
+            var numPages = rowsTotal / rowsShown;
+            for (i = 0; i < numPages; i++) {
+                var pageNum = i + 1;
+                $('#nav').append('<a href="#" rel="' + i + '">' + pageNum + '</a> ');
+            }
+            $('#data tbody tr').hide();
+            $('#data tbody tr').slice(0, rowsShown).show();
+            $('#nav a:first').addClass('active');
+            $('#nav a').bind('click', function () {
+
+                $('#nav a').removeClass('active');
+                $(this).addClass('active');
+                var currPage = $(this).attr('rel');
+                var startItem = currPage * rowsShown;
+                var endItem = startItem + rowsShown;
+                $('#data tbody tr').css('opacity', '0.0').hide().slice(startItem, endItem).
+                css('display', 'table-row').animate({ opacity: 1 }, 300);
+            });
+        });
+    </script>
