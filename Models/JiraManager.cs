@@ -16,10 +16,6 @@ namespace JiraTimesheet.Models
 
     public class JiraManager
     {
-        private readonly string _mBaseUrl = ConfigurationManager.AppSettings["JiraRestApiUrl"];
-        private readonly string _mUsername = ConfigurationManager.AppSettings["userName"];
-        private readonly string _mPassword = ConfigurationManager.AppSettings["password"];
-
         /// <summary>
         /// Runs a query towards the JIRA REST api
         /// </summary>
@@ -31,7 +27,7 @@ namespace JiraTimesheet.Models
         protected string RunQuery(JiraResource resource, string argument = null, string data = null, string method = "GET")
         {
             string result = string.Empty;
-            string url = string.Format("{0}{1}/", _mBaseUrl, resource);
+            string url = string.Format("{0}{1}/", ConfigSetting.JiraRestApiUrl, resource);
 
             if (argument != null)
             {
@@ -64,7 +60,7 @@ namespace JiraTimesheet.Models
 
         private string GetEncodedCredentials()
         {
-            string mergedCredentials = string.Format("{0}:{1}", _mUsername, _mPassword);
+            string mergedCredentials = string.Format("{0}:{1}", ConfigSetting.JiraUsername, ConfigSetting.JiraPassword);
             byte[] byteCredentials = Encoding.UTF8.GetBytes(mergedCredentials);
             return Convert.ToBase64String(byteCredentials);
         }

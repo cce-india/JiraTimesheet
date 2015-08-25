@@ -1,8 +1,9 @@
-﻿@model IEnumerable<JiraTimesheet.Models.JiraTimeSheet>
+﻿@using JiraTimesheet
+@model IEnumerable<JiraTimesheet.Models.JiraTimeSheet>
 @{
     Layout = null;
-    string sBaseUrl = System.Configuration.ConfigurationManager.AppSettings["BaseUrl"];
-    string sJiraUrl = System.Configuration.ConfigurationManager.AppSettings["JiraBaseUrl"];
+    string sBaseUrl = ConfigSetting.BaseUrl;
+    string sJiraUrl = ConfigSetting.JiraUrl;
     string sfileName = ViewBag.startdate.ToString("MMM") + ViewBag.startdate.ToString("dd") + "-" + ViewBag.enddate.ToString("MMM") + ViewBag.enddate.ToString("dd");
     
 }
