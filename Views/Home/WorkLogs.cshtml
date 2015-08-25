@@ -3,10 +3,12 @@
     Layout = null;
     string sBaseUrl = System.Configuration.ConfigurationManager.AppSettings["BaseUrl"];
     string sJiraUrl = System.Configuration.ConfigurationManager.AppSettings["JiraBaseUrl"];
+    string sfileName = ViewBag.startdate.ToString("MMM") + ViewBag.startdate.ToString("dd") + "-" + ViewBag.enddate.ToString("MMM") + ViewBag.enddate.ToString("dd");
+    
 }
 
  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-
+<script src="~/Scripts/jquery.table2excel.js"></script>
 <center>
     <h2>Jira</h2></center>
 <center style="color:blue">@ViewBag.title</center>
@@ -30,8 +32,9 @@ table, th, td {
             border-spacing: 0px !important;
         }
 </style>
-
-<table style="width: 100%" border="1" id="data">
+<button>Export</button>
+<br/>
+<table  class="noExl" style="width: 100%" border="1" id="data">
     <thead>
     <tr>
 
@@ -72,6 +75,7 @@ table, th, td {
     </tbody>
 </table>
 
+
 <div><br/><a href="@sBaseUrl">Back</a></div>
     <script>
         $(document).ready(function () {
@@ -97,4 +101,14 @@ table, th, td {
                 css('display', 'table-row').animate({ opacity: 1 }, 300);
             });
         });
+
+        $("button").click(function(){
+            $("#data").table2excel({
+                exclude: ".noExl",
+                name: "Excel Document Name",
+                filename: '@sfileName'
+        });
+        
+        });
+
     </script>

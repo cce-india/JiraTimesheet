@@ -20,12 +20,13 @@ namespace JiraTimesheet.Controllers
             DateTime endDate = Convert.ToDateTime(collection.GetValue("fromdate").AttemptedValue).Date;
             JiraPresenter jiraPresenter = new JiraPresenter();
             List<JiraTimeSheet> jiraTimeSheetList = jiraPresenter.ProcessIssues(startDate, endDate);
-
+            ViewBag.startdate = startDate;
+            ViewBag.enddate = endDate;
             ViewBag.title = "Displaying " + jiraTimeSheetList.Count + " issues at " + DateTime.Now + " from "+ startDate.Date + " to " + endDate.Date;
-            if (jiraTimeSheetList.Count > 0)
-            {
-                ExportTimeSheetToXlsx(jiraTimeSheetList,GetXlsxFileName(startDate,endDate));
-            }
+            //if (jiraTimeSheetList.Count > 0)
+            //{
+            //    ExportTimeSheetToXlsx(jiraTimeSheetList,GetXlsxFileName(startDate,endDate));
+            //}
             return View("WorkLogs", jiraTimeSheetList);
         }
 
