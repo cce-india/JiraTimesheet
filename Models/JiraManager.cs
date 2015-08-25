@@ -91,9 +91,21 @@ namespace JiraTimesheet.Models
 
         public Expand GetIssueDetails(string issues, int startAt = 0, int maxResults = 50)
         {
-            string argument = "?fields=issuetype,project,key,summary,assignee,status,fixVersions,created,reporter,updated,worklog,customfield_10200,customfield_10101&jql=issue in (" + issues + ")&startAt=" + startAt + "&maxResults=" + maxResults;
+            List<string> fields = new List<string> { "issuetype", "project", "key", "summary", "assignee", "status", "fixVersions", "created", "reporter", "updated", "worklog", "customfield_10200", "customfield_10101" };
 
-            string result = RunQuery(JiraResource.search, argument);
+            string jql = "issue in (" + issues + ")";
+
+            SearchRequest request = new SearchRequest
+            {
+                Fields = fields,
+                Jql = jql,
+                MaxResults = maxResults,
+                StartAt = startAt
+            };
+
+            string data = JsonConvert.SerializeObject(request);
+
+            string result = RunQuery(JiraResource.search, data: data, method: "POST");
 
             Expand response = JsonConvert.DeserializeObject<Expand>(result);
             return response;

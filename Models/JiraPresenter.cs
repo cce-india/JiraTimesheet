@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace JiraTimesheet.Models
 {
@@ -100,7 +101,10 @@ namespace JiraTimesheet.Models
                 total = keyDetailsList.Total;
                 startAt = startAt + 50;
             } while (startAt < total);
-
+            if (jiraTimeSheetList.Count > 0)
+            {
+                jiraTimeSheetList = jiraTimeSheetList.OrderBy(o => o.Updated).ThenBy(o => o.Created).ThenBy(o=>o.FixVersions).ToList();
+            }
             return jiraTimeSheetList;
         }
 
