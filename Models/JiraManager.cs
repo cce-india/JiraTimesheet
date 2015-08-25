@@ -16,9 +16,9 @@ namespace JiraTimesheet.Models
 
     public class JiraManager
     {
-        private readonly string _mBaseUrl = ConfigurationManager.AppSettings["JiraRestApiUrl"];
-        private readonly string _mUsername = ConfigurationManager.AppSettings["userName"];
-        private readonly string _mPassword = ConfigurationManager.AppSettings["password"];
+        private readonly string _mBaseUrl = ConfigSetting.JiraRestApiUrl;
+        private readonly string _mUsername = ConfigSetting.JiraUsername;
+        private readonly string _mPassword = ConfigSetting.JiraPassword;
 
         /// <summary>
         /// Runs a query towards the JIRA REST api
