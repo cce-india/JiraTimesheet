@@ -80,7 +80,7 @@ namespace JiraTimesheet.Models
                             jiraTimeSheet.OriginalAssignee = keyDetails.Fields.OriginalAssignee.Originalassignee;
                         }
 
-                        jiraTimeSheet.Created = keyDetails.Fields.CreatedDate;
+                        jiraTimeSheet.Created = keyDetails.Fields.CreatedDate.DateTime;
                         jiraTimeSheet.IssueType = keyDetails.Fields.IssueType.Name;
                         jiraTimeSheet.Key = keyDetails.Key;
                         jiraTimeSheet.Project = keyDetails.Fields.Project.Name;
@@ -88,7 +88,7 @@ namespace JiraTimesheet.Models
                         jiraTimeSheet.Status = keyDetails.Fields.Status.Name;
                         jiraTimeSheet.Summary = keyDetails.Fields.Summary;
                         jiraTimeSheet.TimeSpent = timeSpentSeconds;
-                        jiraTimeSheet.Updated = keyDetails.Fields.UpdatedDate;
+                        jiraTimeSheet.Updated = keyDetails.Fields.UpdatedDate.DateTime;
                     
                         if (keyDetails.Fields.Website != null)
                         {
@@ -114,7 +114,7 @@ namespace JiraTimesheet.Models
             int timeSpentSeconds = 0;
             foreach (Worklogs worklogs in workLogsOfIssue.Worklogs)
             {
-                if (worklogs.Started >= toDate && worklogs.Started <= fromDate)
+                if (worklogs.Started.DateTime >= toDate && worklogs.Started.DateTime <= fromDate)
                 {
                     if (timeSpentSeconds > 0)
                         timeSpentSeconds = timeSpentSeconds + worklogs.TimeSpentSeconds;

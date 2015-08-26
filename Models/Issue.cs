@@ -40,7 +40,7 @@ namespace JiraTimesheet.Models
         public IssueType IssueType { get; set; }
 
         [JsonProperty("updated")]
-        public DateTime UpdatedDate { get; set; }
+        public DateTimeOffset UpdatedDate { get; set; }
 
         [JsonProperty("worklog")]
         public WorklogOfIssue Worklog { get; set; }
@@ -55,7 +55,7 @@ namespace JiraTimesheet.Models
         public Reporter Reporter { get; set; }
 
         [JsonProperty("created")]
-        public DateTime CreatedDate { get; set; }
+        public DateTimeOffset CreatedDate { get; set; }
 
         [JsonProperty("project")]
         public Project Project { get; set; }

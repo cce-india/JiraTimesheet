@@ -12,6 +12,6 @@ namespace JiraTimesheet.Models
         public int TimeSpentSeconds { get; set; }
 
         [JsonProperty("started")]
-        public DateTime Started { get; set; }
+        public DateTimeOffset Started { get; set; }
     }
 }
