@@ -195,7 +195,7 @@
     </Compile>
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\Assignee.cs" />
-    <Compile Include="Models\AvatarUrls.cs" />
+    <Compile Include="Models\Author.cs" />
     <Compile Include="Models\ExcelUtility.cs" />
     <Compile Include="Models\Extension.cs" />
     <Compile Include="Models\FixVersion.cs" />
@@ -205,7 +205,6 @@
     <Compile Include="Models\JiraPresenter.cs" />
     <Compile Include="Models\JiraTimeSheet.cs" />
     <Compile Include="Models\OriginalAssignee.cs" />
-    <Compile Include="Models\ProjectDescription.cs" />
     <Compile Include="Models\Reporter.cs" />
     <Compile Include="Models\SearchRequest.cs" />
     <Compile Include="Models\SearchResponse.cs" />

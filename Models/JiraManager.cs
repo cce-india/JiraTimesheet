@@ -87,7 +87,7 @@ namespace JiraTimesheet.Models
 
         public Expand GetIssueDetails(string issues, int startAt = 0, int maxResults = 50)
         {
-            List<string> fields = new List<string> { "issuetype", "project", "key", "summary", "assignee", "status", "fixVersions", "created", "reporter", "updated", "worklog", "customfield_10200", "customfield_10101" };
+            List<string> fields = new List<string> { "issuetype", "project", "key", "summary", "assignee", "status", "fixVersions", "created", "reporter", "updated", "customfield_10200", "customfield_10101" };
 
             string jql = "issue in (" + issues + ")";
 
@@ -104,6 +104,16 @@ namespace JiraTimesheet.Models
             string result = RunQuery(JiraResource.search, data: data, method: "POST");
 
             Expand response = JsonConvert.DeserializeObject<Expand>(result);
+            return response;
+        }
+
+        public WorklogOfIssue GetWorkLogsForIssue(string issue)
+        {
+            string argument = issue + "/worklog";
+            string result = RunQuery(JiraResource.issue, argument);
+
+            WorklogOfIssue response = JsonConvert.DeserializeObject<WorklogOfIssue>(result);
+
             return response;
         }
     }

@@ -55,9 +55,10 @@ namespace JiraTimesheet.Models
                 Expand keyDetailsList = manager.GetIssueDetails(issues, startAt);
                 foreach (Issue keyDetails in keyDetailsList.IssueList)
                 {
-                    WorklogOfIssue workLogs = keyDetails.Fields.Worklog;
-                    int timeSpentSeconds = GetIssueTimeSpent(workLogs, startDate, endDate);
-                    if (timeSpentSeconds > 0)
+                    //Call jira rest api to get all worklogs for a issue
+                    WorklogOfIssue workLogs = manager.GetWorkLogsForIssue(keyDetails.Key);
+                    IssueWorklog objWorklog = GetIssueTimeSpent(workLogs, startDate, endDate);
+                    if (objWorklog.TimeSpentSeconds > 0)
                     {
                         JiraTimeSheet jiraTimeSheet = new JiraTimeSheet();
                         foreach (FixVersion fixVersion in keyDetails.Fields.FixVersions)
@@ -87,9 +88,11 @@ namespace JiraTimesheet.Models
                         jiraTimeSheet.Reporter = keyDetails.Fields.Reporter.reporter;
                         jiraTimeSheet.Status = keyDetails.Fields.Status.Name;
                         jiraTimeSheet.Summary = keyDetails.Fields.Summary;
-                        jiraTimeSheet.TimeSpent = timeSpentSeconds;
+                        jiraTimeSheet.TimeLoggedBy = objWorklog.LoggedInPerson;
+                        jiraTimeSheet.TimeSpent = objWorklog.TimeSpent;
+                        jiraTimeSheet.TotalTimeSpent = objWorklog.TimeSpentSeconds;
                         jiraTimeSheet.Updated = keyDetails.Fields.UpdatedDate.DateTime;
-                    
+
                         if (keyDetails.Fields.Website != null)
                         {
                             jiraTimeSheet.Website = keyDetails.Fields.Website.WebSite;
@@ -103,26 +106,69 @@ namespace JiraTimesheet.Models
             } while (startAt < total);
             if (jiraTimeSheetList.Count > 0)
             {
-                jiraTimeSheetList = jiraTimeSheetList.OrderBy(o => o.Updated).ThenBy(o => o.Created).ThenBy(o=>o.FixVersions).ToList();
+                jiraTimeSheetList = jiraTimeSheetList.OrderBy(o => o.Updated).ThenBy(o => o.Created).ThenBy(o => o.FixVersions).ToList();
             }
             return jiraTimeSheetList;
         }
 
         // Calculate time spent on a issue in given date range
-        public int GetIssueTimeSpent(WorklogOfIssue workLogsOfIssue, DateTime toDate, DateTime fromDate)
+        public IssueWorklog GetIssueTimeSpent(WorklogOfIssue workLogsOfIssue, DateTime toDate, DateTime fromDate)
         {
             int timeSpentSeconds = 0;
+            string loggedInPerson = string.Empty;
+            string timeSpent = string.Empty;
+            IssueWorklog objIssueWorklog = new IssueWorklog();
+            List<LoggedInUserTimeSpent> objInUserTimeSpents = new List<LoggedInUserTimeSpent>();
             foreach (Worklogs worklogs in workLogsOfIssue.Worklogs)
             {
                 if (worklogs.Started.DateTime >= toDate && worklogs.Started.DateTime <= fromDate)
                 {
-                    if (timeSpentSeconds > 0)
-                        timeSpentSeconds = timeSpentSeconds + worklogs.TimeSpentSeconds;
+                    LoggedInUserTimeSpent objUserTimeSpent = new LoggedInUserTimeSpent();
+                    if (objInUserTimeSpents.All(o => o.LoggedInPerson != worklogs.Author.Name))
+                    {
+                        objUserTimeSpent.LoggedInPerson = worklogs.Author.Name;
+                        objUserTimeSpent.TimeSpent = worklogs.TimeSpentSeconds;
+                        objInUserTimeSpents.Add(objUserTimeSpent);
+                    }
                     else
+                    {
+                        int index = objInUserTimeSpents.FindIndex(objLoggedInUserTimeSpent => objLoggedInUserTimeSpent.LoggedInPerson.Equals(worklogs.Author.Name,StringComparison.Ordinal));
+                        objInUserTimeSpents.ElementAt(index).TimeSpent += worklogs.TimeSpentSeconds;
+                    }
+                    if (timeSpentSeconds > 0)
+                    {
+                        timeSpentSeconds = timeSpentSeconds + worklogs.TimeSpentSeconds;
+                    }
+                    else
+                    {
                         timeSpentSeconds = worklogs.TimeSpentSeconds;
+                    }
                 }
             }
-            return timeSpentSeconds;
+            foreach (var loggedInDetails in objInUserTimeSpents)
+            {
+                if (!string.IsNullOrEmpty(timeSpent))
+                {
+                    loggedInPerson += "<br/>" + loggedInDetails.LoggedInPerson;
+                }
+                else
+                {
+                    loggedInPerson = loggedInDetails.LoggedInPerson;
+                }
+                if (!string.IsNullOrEmpty(timeSpent))
+                {
+                    timeSpent += "<br/>" + loggedInDetails.TimeSpent;
+                }
+                else
+                {
+                    timeSpent = loggedInDetails.TimeSpent.ToString();
+                }
+            }
+            objIssueWorklog.TimeSpentSeconds = timeSpentSeconds;
+            objIssueWorklog.TimeSpent = timeSpent;
+            objIssueWorklog.LoggedInPerson = loggedInPerson;
+
+            return objIssueWorklog;
         }
     }
 }

@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using Newtonsoft.Json;
 
 namespace JiraTimesheet.Models
@@ -13,5 +10,24 @@ namespace JiraTimesheet.Models
 
         [JsonProperty("started")]
         public DateTimeOffset Started { get; set; }
+
+        [JsonProperty("author")]
+        public Author Author { get; set; }
+    }
+
+    public class IssueWorklog
+    {
+        public int TimeSpentSeconds { get; set; }
+
+        public string TimeSpent { get; set; }
+
+        public string LoggedInPerson { get; set; }
+    }
+
+    public class LoggedInUserTimeSpent
+    {
+        public int TimeSpent { get; set; }
+
+        public string LoggedInPerson { get; set; }
     }
 }

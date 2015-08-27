@@ -44,7 +44,9 @@ table, th, td {
         <th>Key</th>
         <th>Summary</th>
         <th>Original Assignee</th>
+        <th>Time Logged By</th>
         <th>Time Spent</th>
+        <th>Σ Time Spent</th>
         <th>Assignee</th>
         <th>Status</th>
         <th>Fix Version/s</th>
@@ -63,7 +65,9 @@ table, th, td {
             <td><a href="@sJiraUrl/@r.Key" target="">@r.Key</a></td>
             <td>@r.Summary</td>
             <td>@r.OriginalAssignee</td>
-            <td>@r.TimeSpent</td>
+            <td>@Html.Raw(r.TimeLoggedBy)</td>
+            <td>@Html.Raw(r.TimeSpent)</td>
+            <td>@r.TotalTimeSpent</td>
             <td>@r.Assignee</td>
             <td>@r.Status</td>
             <td>@r.FixVersions</td>

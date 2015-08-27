@@ -25,7 +25,11 @@ namespace JiraTimesheet.Models
 
         public string Website { get; set; }
 
-        public int TimeSpent { get; set; }
+        public string TimeLoggedBy { get; set; }
+
+        public string TimeSpent { get; set; }
+
+        public int TotalTimeSpent { get; set; }
 
         public DateTime Created { get; set; }
 

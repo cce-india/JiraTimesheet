@@ -42,9 +42,6 @@ namespace JiraTimesheet.Models
         [JsonProperty("updated")]
         public DateTimeOffset UpdatedDate { get; set; }
 
-        [JsonProperty("worklog")]
-        public WorklogOfIssue Worklog { get; set; }
-
         [JsonProperty("customfield_10101")]
         public OriginalAssignee OriginalAssignee { get; set; }
 

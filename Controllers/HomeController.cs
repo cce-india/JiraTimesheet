@@ -23,7 +23,6 @@ namespace JiraTimesheet.Controllers
             ViewBag.startdate = startDate;
             ViewBag.enddate = endDate;
             ViewBag.title = "Displaying " + jiraTimeSheetList.Count + " issues at " + DateTime.Now + " from "+ startDate.Date + " to " + endDate.Date;
-            //if (jiraTimeSheetList.Count > 0)
             return View("WorkLogs", jiraTimeSheetList);
         }
 
